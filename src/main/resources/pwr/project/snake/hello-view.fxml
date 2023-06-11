@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<?import javafx.scene.control.Button?>
+<VBox alignment="CENTER" spacing="0.0" fx:id="rootVBox" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pwr.project.snake.SnakeMenu">
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+  </padding>
+
+  <ImageView fitHeight="200" fitWidth="450" pickOnBounds="true" preserveRatio="true">
+    <image>
+      <Image url="@SnakeGameYell.png" />
+    </image>
+  </ImageView>
+
+  <Label fx:id="welcomeText"/>
+  <Button text="Graj" onAction="#onGrajButtonClick" prefWidth="300" prefHeight="50"  fx:id="btnGraj" />
+  <Label fx:id="welcomeText1"/>
+  <Button text="Wyiniki" onAction="#onWynikButtonClick" prefWidth="300" prefHeight="50" fx:id="btnWyniki"/>
+  <Label fx:id="welcomeText2"/>
+  <Button text="Ustawienia" onAction="#onHelloButtonClick" prefWidth="300" prefHeight="50" fx:id="btnUstawienia"/>
+  <Label fx:id="welcomeText3"/>
+  <Button text="Wyjdz" onAction="#onExitButtonClick" prefWidth="300" prefHeight="50" fx:id="btnWyjdz"/>
+</VBox>
