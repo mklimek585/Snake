@@ -22,7 +22,7 @@
   <Label fx:id="welcomeText"/>
   <Button text="Graj" onAction="#onGrajButtonClick" prefWidth="300" prefHeight="50"  fx:id="btnGraj" />
   <Label fx:id="welcomeText1"/>
-  <Button text="Wyiniki" onAction="#onWynikButtonClick" prefWidth="300" prefHeight="50" fx:id="btnWyniki"/>
+  <Button text="Wyniki" onAction="#onWynikButtonClick" prefWidth="300" prefHeight="50" fx:id="btnWyniki"/>
   <Label fx:id="welcomeText2"/>
   <Button text="Ustawienia" onAction="#onHelloButtonClick" prefWidth="300" prefHeight="50" fx:id="btnUstawienia"/>
   <Label fx:id="welcomeText3"/>
