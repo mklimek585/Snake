@@ -60,12 +60,10 @@ public class SnakeMenu extends Application {
         btnWyjdz.setOnMousePressed(event -> btnWyjdz.setStyle("fx-border-color: none;"));
         btnWyjdz.setOnMouseReleased(event -> btnWyjdz.setStyle("-fx-border-color: black;"));
     }
-
     @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Póki co zmiana ustawień nie została zaimplementowana!");
     }
-
     @FXML
     protected void onWynikButtonClick() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SnakeMenu.class.getResource("ScoreboardHandler.fxml"));

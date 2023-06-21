@@ -39,7 +39,7 @@ public class ScoreHandler {
 
         for(int i = 0; i < Scores.size(); i++) {
             scoreList.getItems().add(Scores.get(i).toString());
-            System.out.print("Wyniki " + Scores.get(i) + "\n");
+//            System.out.print("Wyniki " + Scores.get(i) + "\n");
         }
     }
 
@@ -65,8 +65,8 @@ public class ScoreHandler {
             while ((line = br.readLine()) != null) {
                 var_score = Integer.parseInt(line);
                 Scores.add(var_score);
-                System.out.print("Czytany wynik: " + var_score + " \n");
-                System.out.println(line);
+//                System.out.print("Czytany wynik: " + var_score + " \n");
+//                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
