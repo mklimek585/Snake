@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eac9e2d-bf31-4141-b976-f6d76c01b6a6" name="Changes" comment="Działające AI i logika gry">
+    <list default="true" id="4eac9e2d-bf31-4141-b976-f6d76c01b6a6" name="Changes" comment="Gromp">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pwr/project/snake/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pwr/project/snake/Game.java" afterDir="false" />
     </list>
@@ -98,14 +98,22 @@
       <option name="project" value="LOCAL" />
       <updated>1687360049708</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Gromp">
+      <created>1687366322782</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1687366322782</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Zapis kodu który działa 11.06 19.:00" />
     <MESSAGE value="Działające AI i logika gry" />
-    <option name="LAST_COMMIT_MESSAGE" value="Działające AI i logika gry" />
+    <MESSAGE value="Gromp" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gromp" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -103,7 +103,6 @@ public class Game extends Thread{
         }
         Object(Object snake) {
             // SnakeAI konstruktor
-
             this.score = 0;
             ArrayList<Integer> pom = spawnSnakeAI(snake);
             int x = pom.get(0); int y = pom.get(1); // Ustawiam x i y na losowe wartosci
@@ -174,10 +173,10 @@ public class Game extends Thread{
         this.SQUARE_SIZE = height / ROWS;
         this.scoreHandler = new ScoreHandler();
 
-        root.setStyle("-fx-background-color: #429642;"); // Change to your desired color #86b42e
+        root.setStyle("-fx-background-color: #429642;"); // #86b42e
 
         this.canvas = new Canvas(width, height);
-        root.setCenter(canvas);  // This will center the canvas in the BorderPane
+        root.setCenter(canvas);
         gc = canvas.getGraphicsContext2D();
     }
 
@@ -230,7 +229,7 @@ public class Game extends Thread{
 
             for(int i = counter; i < food_amount; i++) {
                 boolean cond;
-                int attempts = 0;  // Counter of attempts for the current fruit
+                int attempts = 0;  // Zabezpieczenie wyjatku, nie ma juz miejsca na spawnowanie owocow
                 do {
                     cond = false;
                     randomX = rand.nextInt(40);
@@ -519,16 +518,10 @@ public class Game extends Thread{
         layout.getChildren().addAll(textLayout, buttonLayout);         // Dodaje layouty do layoutu głównego
         overlay.getChildren().add(layout);
 
-        // Create new StackPane which will contain the overlay
+        // Wyświetlenie okna konca gry
         this.wrapper = new StackPane();
-
-        // Add overlay to wrapper
         wrapper.getChildren().add(overlay);
-
-        // Set wrapper alignment to center
         StackPane.setAlignment(overlay, Pos.CENTER);
-
-        // Add overlay to root
         this.root.setCenter(wrapper);
     }
     private boolean isGameOver(List<Object> object_list) {
@@ -558,7 +551,7 @@ public class Game extends Thread{
         return false;
     }
 
-    private void setAvoid() {
+    private void setAvoid() { // Lista punktow do omijania przez AI
         avoid = new ArrayList<>(obstaces);
         for(int i = 0; i < COLUMNS; i++) { // Boundary (-1,0-39)
             Point pom = new Point(-1, i);
@@ -598,7 +591,6 @@ public class Game extends Thread{
         int tempX = new Integer(object_list.get(1).Head.x);
         int tempY = new Integer(object_list.get(1).Head.y);
 
-        // TODO by nie wjezdzal w drugiego weza
         List<Integer> validDirections = new ArrayList<>(possibleDirections);
         for (Integer possibleDirection : possibleDirections) {
             Point tempPoint = new Point(object_list.get(1).Head.x, object_list.get(1).Head.y);
@@ -724,7 +716,7 @@ public class Game extends Thread{
             possibleDirections.add(UP); // 2
             possibleDirections.add(DOWN); // 3
 
-            // Remove any directions that lead to snake bodies or obstacles
+            // Ograniczenie mozliwych kierunkow
             List<Integer> validDirections = new ArrayList<>(possibleDirections);
             for (Integer possibleDirection : possibleDirections) {
                 Point tempPoint = new Point(Gromp.x, Gromp.y);
@@ -758,7 +750,7 @@ public class Game extends Thread{
             possibleDirections.addAll(validDirections);
             validDirections.clear();
 
-            // Find the closest snake
+            // Szuka najblizszego weza
             Object closestSnake = null;
             double minDistance = Double.MAX_VALUE;
             for(Object snake : object_list){
@@ -769,7 +761,7 @@ public class Game extends Thread{
                 }
             }
 
-            // Determine the direction to move the Gromp
+            // Wybranie kierunku
             int newDirection = -1;
             if(closestSnake != null){
                 if(closestSnake.Head.x < Gromp.x && possibleDirections.contains(LEFT)){
@@ -785,8 +777,6 @@ public class Game extends Thread{
 
             Random rand = new Random();
 
-            // If the new direction is unavailable, choose a random one from available ones
-            // or set to -1 if there are no available directions
             if(!possibleDirections.isEmpty()){
                 if(!possibleDirections.contains(newDirection)){
                     int randIndex = rand.nextInt(possibleDirections.size());
@@ -794,7 +784,7 @@ public class Game extends Thread{
                 }
             }
 
-            // Actually move the Gromp
+            // Ruch Grompa
             if(newDirection == RIGHT) {
                 Gromp.setX(Gromp.getX() + 1);
             } else if(newDirection == LEFT) {
