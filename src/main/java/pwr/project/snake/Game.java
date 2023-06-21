@@ -56,6 +56,7 @@ public class Game extends Thread{
     private List<Point> avoid = new ArrayList<>();
     private boolean snakeai = true;
     private Point Gromp; // TODO Gromp w formie punktu który ucieka po mapie
+    private boolean isGrompEaten = false;
     private List<Object> object_list = new ArrayList<>(); // Lista na Snake, SnakeAI
 
     public class Point {
@@ -134,26 +135,26 @@ public class Game extends Thread{
 //            }
         }
 
-        private ArrayList<Integer> spawnSnake() { // TODO funkcja spawnujaca Snake'a
+        private ArrayList<Integer> spawnSnake() {
             ArrayList<Integer> pom = new ArrayList<>();
             int randomX; int randomY;
             Random rand = new Random();
-            randomX = rand.nextInt(30);
-            randomY = rand.nextInt(30);
+            randomX = rand.nextInt(35);
+            randomY = rand.nextInt(35);
             randomX += 3; randomY += 3; // Żeby nie zacząć np na 0,0
             pom.add(randomX); pom.add(randomY); // pom(0) = x, pom(1) = y
             return pom;
         }
 
-        private ArrayList<Integer> spawnSnakeAI(Object snake) { // TODO funkcja spawnujaca SnakeAI
+        private ArrayList<Integer> spawnSnakeAI(Object snake) {
             ArrayList<Integer> pom = new ArrayList<>();
             int randomX; int randomY;
             Random rand = new Random();
             boolean cond = false;
             do {
                 cond = false;
-                randomX = rand.nextInt(40);
-                randomY = rand.nextInt(40);
+                randomX = rand.nextInt(35);
+                randomY = rand.nextInt(35);
                 if (Math.abs(snake.getHead().getX() - randomX) <= 3 && Math.abs(snake.getHead().getY() - randomY) <= 3) {
                     cond = true;
                     break;
@@ -166,7 +167,6 @@ public class Game extends Thread{
         }
 
     }
-
     public Game(BorderPane gameRoot, int width, int height) {  // Changed VBox to BorderPane BorderPane
         this.root = gameRoot;
         this.width = width;
@@ -191,18 +191,24 @@ public class Game extends Thread{
                 valid = true;
                 randomX = rand.nextInt(40);
                 randomY = rand.nextInt(40);
-                for (Point p : object_list.get(0).snakeBody) { // Check for first snake
+                for (Point p : object_list.get(0).snakeBody) { // Snake
                     if (Math.abs(p.getX() - randomX) <= 3 && Math.abs(p.getY() - randomY) <= 3) {
                         valid = false;
                         break;
                     }
                 }
-                if(valid){ // If the point is valid for the first snake, check for the second snake
+                if(valid){ // SnakeAI
                     for (Point p : object_list.get(1).snakeBody) {
                         if (Math.abs(p.getX() - randomX) <= 3 && Math.abs(p.getY() - randomY) <= 3) {
                             valid = false;
                             break;
                         }
+                    }
+                }
+                if(valid){ // Gromp
+                    if (Math.abs(Gromp.x - randomX) <= 3 && Math.abs(Gromp.y - randomY) <= 3) {
+                        valid = false;
+                        break;
                     }
                 }
             } while (!valid);
@@ -248,11 +254,6 @@ public class Game extends Thread{
                     for(int j = 0; j < obstaces.size() && !cond; j++) { // Obstacles
                         if(randomX == obstaces.get(j).getX() &&
                                 randomY == obstaces.get(j).getY()) {
-                            System.out.print("Koordynaty ktore skonczyly gre \n");
-                            System.out.print("Head:" + object_list.get(0).Head.getX() +","
-                                    + object_list.get(0).Head.getY() + "\n");
-                            System.out.print("Obstaces:" + obstaces.get(j).getX() +","
-                                    + obstaces.get(j).getY() + "\n");
                             cond = true;
                         }
                     }
@@ -309,17 +310,17 @@ public class Game extends Thread{
         });
         stage.setTitle("Snake Game");
         stage.setScene(gameScene);
-        //stage.setMaximized(true);
         stage.setFullScreen(true);
 
         gameOver = false;
         Object snake = new Object();
         Object snakeAI = new Object(snake);
         object_list.add(snake); object_list.add(snakeAI); // snake(0) snakeAI(1)
+        spawnGromp(object_list);
 
         object_list.get(0).score = 0;
         generateObstaces();
-        counter = 0;                                    // Tu musi być zerowane
+        counter = 0;
         counter = generateFood(counter);  // food_amount w menu bedzie można ustawić
         setAvoid();
 
@@ -361,31 +362,26 @@ public class Game extends Thread{
         System.out.print("restartGame \n");
         this.root.getChildren().remove(wrapper);
 
-        // Check if the timeline exists and stop it
-        if (this.timeline != null) {
-            this.timeline.stop();
-        }
-
         this.canvas = new Canvas(width, height);
-        root.setCenter(canvas);  // This will center the canvas in the BorderPane
+        root.setCenter(canvas);  // Centrowanie canvy
         gc = canvas.getGraphicsContext2D();
 
         gameOver = false;
-        System.out.print("restartGame2 \n");
+        //System.out.print("restartGame2 \n");
         Object snake = new Object();
         Object snakeAI = new Object(snake);
-        System.out.print("restartGame3 \n");
+        //System.out.print("restartGame3 \n");
         object_list.clear();
         object_list.add(snake); object_list.add(snakeAI); // snake(0) snakeAI(1)
-        System.out.print("restartGame4 \n");
+        spawnGromp(object_list);
 
         avoid.clear();
-        foods.clear(); // TODO reszta zmiennych tez bedzie tu musiała być czyszczona
+        foods.clear();
         obstaces.clear();
         object_list.get(0).score = 0;
         generateObstaces();
         counter = 0;
-        System.out.print("Food counter = " + food_amount + "\n");
+//        System.out.print("Food counter = " + food_amount + "\n");
         counter = generateFood(counter);  // food_amount w menu bedzie można ustawić
         setAvoid();
 
@@ -412,7 +408,6 @@ public class Game extends Thread{
                 }
             }
         });
-        System.out.print("Dochodze do tego momentu");
         this.timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> {
             try {
                 realTimeGame(gc, object_list, foods, stage);
@@ -436,6 +431,7 @@ public class Game extends Thread{
             counter = generateFood(counter);
             drawFood(foods);
             drawSnake();
+            drawGromp();
             switch (object_list.get(0).Direction) {
                 case RIGHT:
                     moveRight(object_list.get(0));
@@ -451,7 +447,8 @@ public class Game extends Thread{
                     break;
             }
             moveSnakeAI(object_list);
-//            System.out.print("gameOver = " + gameOver + "\n");
+            moveGromp(object_list);
+
         }
         else {
             object_list.get(0).printPosition();
@@ -560,9 +557,6 @@ public class Game extends Thread{
 
         return false;
     }
-
-    // TODO spawnGame - generujaca przeszkody, węże, później owoce by na siebie nie nachodziły
-    // TODO drawGame - układająca co sie rysuje po czym
 
     private void setAvoid() {
         avoid = new ArrayList<>(obstaces);
@@ -722,6 +716,138 @@ public class Game extends Thread{
         possibleDirections.clear();
     }
 
+    private void moveGromp(List<Object> object_list) {
+        if(!isGrompEaten) {
+            List<Integer> possibleDirections = new ArrayList<>();
+            possibleDirections.add(RIGHT); // 0
+            possibleDirections.add(LEFT); // 1
+            possibleDirections.add(UP); // 2
+            possibleDirections.add(DOWN); // 3
+
+            // Remove any directions that lead to snake bodies or obstacles
+            List<Integer> validDirections = new ArrayList<>(possibleDirections);
+            for (Integer possibleDirection : possibleDirections) {
+                Point tempPoint = new Point(Gromp.x, Gromp.y);
+                if (possibleDirection == RIGHT) {
+                    tempPoint.setX(tempPoint.getX() + 1);
+                } else if (possibleDirection == LEFT) {
+                    tempPoint.setX(tempPoint.getX() - 1);
+                } else if (possibleDirection == UP) {
+                    tempPoint.setY(tempPoint.getY() - 1);
+                } else if (possibleDirection == DOWN) {
+                    tempPoint.setY(tempPoint.getY() + 1);
+                }
+
+                for (Point point : avoid) {
+                    if (tempPoint.isEqualTo(point)) {
+                        validDirections.remove(possibleDirection);
+                        break;
+                    }
+                }
+                for (Object snake : object_list) {
+                    for (Point bodyPart : snake.snakeBody) {
+                        if (tempPoint.isEqualTo(bodyPart)) {
+                            validDirections.remove(possibleDirection);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            possibleDirections.clear();
+            possibleDirections.addAll(validDirections);
+            validDirections.clear();
+
+            // Find the closest snake
+            Object closestSnake = null;
+            double minDistance = Double.MAX_VALUE;
+            for(Object snake : object_list){
+                double currentDistance = Math.sqrt(Math.pow(Gromp.x - snake.Head.x, 2) + Math.pow(Gromp.y - snake.Head.y, 2));
+                if(currentDistance < minDistance) {
+                    minDistance = currentDistance;
+                    closestSnake = snake;
+                }
+            }
+
+            // Determine the direction to move the Gromp
+            int newDirection = -1;
+            if(closestSnake != null){
+                if(closestSnake.Head.x < Gromp.x && possibleDirections.contains(LEFT)){
+                    newDirection = LEFT;
+                } else if(closestSnake.Head.x > Gromp.x && possibleDirections.contains(RIGHT)){
+                    newDirection = RIGHT;
+                } else if(closestSnake.Head.y < Gromp.y && possibleDirections.contains(UP)){
+                    newDirection = UP;
+                } else if(closestSnake.Head.y > Gromp.y && possibleDirections.contains(DOWN)){
+                    newDirection = DOWN;
+                }
+            }
+
+            Random rand = new Random();
+
+            // If the new direction is unavailable, choose a random one from available ones
+            // or set to -1 if there are no available directions
+            if(!possibleDirections.isEmpty()){
+                if(!possibleDirections.contains(newDirection)){
+                    int randIndex = rand.nextInt(possibleDirections.size());
+                    newDirection = possibleDirections.get(randIndex);
+                }
+            }
+
+            // Actually move the Gromp
+            if(newDirection == RIGHT) {
+                Gromp.setX(Gromp.getX() + 1);
+            } else if(newDirection == LEFT) {
+                Gromp.setX(Gromp.getX() - 1);
+            } else if(newDirection == UP) {
+                Gromp.setY(Gromp.getY() - 1);
+            } else if(newDirection == DOWN) {
+                Gromp.setY(Gromp.getY() + 1);
+            }
+        }
+    }
+
+    void spawnGromp(List<Object> object_list) {
+        Gromp = new Point(-1,-1);
+        isGrompEaten = false;
+        int randomX; int randomY;
+        Random rand = new Random();
+        boolean cond = false;
+        do {
+            cond = false;
+            randomX = rand.nextInt(35);
+            randomY = rand.nextInt(35);
+            if (Math.abs(object_list.get(0).getHead().getX() - randomX) <= 3 && Math.abs(object_list.get(0).getHead().getY() - randomY) <= 3) {
+                cond = true;
+                break;
+            }
+            if (Math.abs(object_list.get(1).getHead().getX() - randomX) <= 3 && Math.abs(object_list.get(1).getHead().getY() - randomY) <= 3) {
+                cond = true;
+                break;
+            }
+        } while(cond);
+
+        randomX += 3; randomY += 3; // Żeby nie zacząć np na 0,0
+        Gromp.x = randomX;
+        Gromp.y = randomY;
+    }
+
+    boolean eatGromp(Object snake) {
+        if(!isGrompEaten) {
+            if(snake.Head.isEqualTo(Gromp)) {
+                isGrompEaten = true;
+                snake.score += 100;
+                return true;
+            }
+        }
+        return false;
+    }
+    private void drawGromp() {
+        if(!isGrompEaten) {
+            gc.setFill(Color.web("911bc3"));
+            gc.fillRect(Gromp.x * SQUARE_SIZE, Gromp.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        }
+    }
     private void drawoObstaces() {
         gc.setFill(Color.web("5e4028"));
         for (int i = 0; i < obstaces.size(); i++) {
@@ -805,6 +931,8 @@ public class Game extends Thread{
         if (eatFood(foods,snake)) {
             // Jeśli wąż zjadł jedzenie, dodaj nowy punkt do ciała węża bez usuwania ostatniego (wąż rośnie)
             snake.snakeBody.add(0,newPoint);
+        } else if (eatGromp(snake)) {
+            snake.snakeBody.add(0,newPoint);
         } else {
             // Jeśli wąż nie zjadł jedzenia, przesuń całe ciało węża (dodaj na początek, usuń z końca)
             snake.snakeBody.add(0,newPoint);
@@ -817,7 +945,10 @@ public class Game extends Thread{
         if (eatFood(foods,snake)) {
             // Jeśli wąż zjadł jedzenie, dodaj nowy punkt do ciała węża bez usuwania ostatniego (wąż rośnie)
             snake.snakeBody.add(0,newPoint);
-        } else {
+        } else if (eatGromp(snake)) {
+            snake.snakeBody.add(0,newPoint);
+        }
+        else {
             // Jeśli wąż nie zjadł jedzenia, przesuń całe ciało węża (dodaj na początek, usuń z końca)
             snake.snakeBody.add(0,newPoint);
             snake.snakeBody.remove(snake.snakeBody.size()-1); // Usuń ostatni element
@@ -828,6 +959,8 @@ public class Game extends Thread{
         Point newPoint = new Point(snake.Head.x, snake.Head.y);
         if (eatFood(foods,snake)) {
             // Jeśli wąż zjadł jedzenie, dodaj nowy punkt do ciała węża bez usuwania ostatniego (wąż rośnie)
+            snake.snakeBody.add(0,newPoint);
+        } else if (eatGromp(snake)) {
             snake.snakeBody.add(0,newPoint);
         } else {
             // Jeśli wąż nie zjadł jedzenia, przesuń całe ciało węża (dodaj na początek, usuń z końca)
@@ -840,6 +973,8 @@ public class Game extends Thread{
         Point newPoint = new Point(snake.Head.x, snake.Head.y);
         if (eatFood(foods,snake)) {
             // Jeśli wąż zjadł jedzenie, dodaj nowy punkt do ciała węża bez usuwania ostatniego (wąż rośnie)
+            snake.snakeBody.add(0,newPoint);
+        } else if (eatGromp(snake)) {
             snake.snakeBody.add(0,newPoint);
         } else {
             // Jeśli wąż nie zjadł jedzenia, przesuń całe ciało węża (dodaj na początek, usuń z końca)

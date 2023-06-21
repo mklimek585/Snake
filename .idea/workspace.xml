@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eac9e2d-bf31-4141-b976-f6d76c01b6a6" name="Changes" comment="Zapis kodu który działa 11.06 19.:00">
+    <list default="true" id="4eac9e2d-bf31-4141-b976-f6d76c01b6a6" name="Changes" comment="Działające AI i logika gry">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scoreboard.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Scoreboard.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pwr/project/snake/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pwr/project/snake/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pwr/project/snake/ScoreHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pwr/project/snake/ScoreHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pwr/project/snake/SnakeMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pwr/project/snake/SnakeMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,12 +91,34 @@
       <option name="project" value="LOCAL" />
       <updated>1686502679961</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Działające AI i logika gry">
+      <created>1687360049708</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1687360049708</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Zapis kodu który działa 11.06 19.:00" />
-    <option name="LAST_COMMIT_MESSAGE" value="Zapis kodu który działa 11.06 19.:00" />
+    <MESSAGE value="Działające AI i logika gry" />
+    <option name="LAST_COMMIT_MESSAGE" value="Działające AI i logika gry" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
